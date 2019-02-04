@@ -1,0 +1,86 @@
+spring:
+  application:
+    name: mtg-tournaments
+  mvc:
+#    static-path-pattern: /resources/**
+    throw-exception-if-no-handler-found: true
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
+  h2:
+    console:
+      enabled: true
+      settings:
+        web-allow-others: true
+      path: /manage/h2
+
+# ----------------------------------------
+# Actuator config
+# ----------------------------------------
+management:
+  endpoints:
+    web:
+      base-path: /manage
+
+# ----------------------------------------
+# Swagger config
+# ----------------------------------------
+springfox:
+  documentation:
+    swagger:
+      v2:
+        path: /api/docs
+
+# ----------------------------------------
+# Logging config
+# ----------------------------------------
+logging:
+  level:
+    ROOT: info
+    io.swagger.models.parameters: off
+    org.mtgpeasant.tournaments: debug
+
+# ----------------------------------------
+# Application config
+# ----------------------------------------
+application:
+  swagger:
+    clientId: mtg-tournaments
+    clientSecret: ${OAUTH_CLIENT_SECRET:clientsecret}
+  sso:
+    google:
+      client:
+        clientId: ${SSO_GOOGLE_CLIENT_ID:57036167960-aru4oi9nkr5dknl3079jdini0p2d4u1h.apps.googleusercontent.com}
+        clientSecret: ${SSO_GOOGLE_CLIENT_SECRET}
+        accessTokenUri: https://www.googleapis.com/oauth2/v4/token
+        userAuthorizationUri: https://accounts.google.com/o/oauth2/v2/auth
+        clientAuthenticationScheme: form
+        scope:
+          - openid
+          - email
+          - profile
+      resource:
+        userInfoUri: https://www.googleapis.com/oauth2/v3/userinfo
+        preferTokenInfo: true
+
+  # OAuth authorization server configuration
+  oauth:
+    signing-key: ${OAUTH_SERVER_KEY:signkey}
+    verifier-key: ${OAUTH_SERVER_KEY:signkey}
+    clients:
+      -
+        clientId: ${application.swagger.clientId}
+        clientSecret: ${application.swagger.clientSecret}
+        grant-types:
+          - authorization_code
+          - impicit
+          - refresh_token
+        authorities:
+          - ROLE_CLIENT
+        scopes:
+          - api
+        auto-approve: true
+        redirect-uris:
+          - http://localhost:8080/oauth/callback
+          - http://localhost:8080/webjars/springfox-swagger-ui/oauth2-redirect.html

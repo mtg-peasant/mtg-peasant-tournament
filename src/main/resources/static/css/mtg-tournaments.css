@@ -1,0 +1,93 @@
+/* ============================================================================ */
+/* === Bootstrap customizations
+/* ============================================================================ */
+body {
+    background: url("images/white_linen.png");
+}
+.navbar {
+    border-radius: 0;
+    background-color: #323232;
+    border: none;
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5);
+}
+.navbar-brand {
+    background: url("images/logo-32.png") 10px center no-repeat;
+    padding-left: 50px;
+    color: #e3e3e3 !important;
+    font-weight: bold;
+}
+.navbar .user-picture {
+    height: 32px;
+    margin: -10px 0;
+}
+/* footer (sticky) */
+html {
+    position: relative;
+    min-height: 100%;
+}
+body {
+    /* Margin bottom by footer height */
+    margin-bottom: 60px;
+}
+#footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background-color: rgba(50,50,50,0.7);
+    color: #e3e3e3;
+    margin-top: 0;
+    /* set height for sticky */
+    height: 40px;
+    padding: 10px 0;
+    border: none;
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5);
+}
+#footer li:BEFORE {
+    content: "|";
+    margin-right: 15px;
+    color: #777;
+}
+#footer li:FIRST-CHILD:BEFORE {
+    content: "";
+    margin-right: 0;
+}
+
+/* ============================================================================ */
+/* === specific styles
+/* ============================================================================ */
+.btn-google {
+    background-image: url("images/google.svg");
+    background-position: 5px center;
+    background-repeat: no-repeat;
+    background-size: auto 1.5em;
+    padding-left: 2.1em;
+}
+.form-control.has-error {
+    border-color: #a94442;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+}
+.field-errors {
+    font-style: italic;
+    color: #a94442;
+}
+/* ============================================================================ */
+/* === responsive styles
+/* ============================================================================ */
+@media (min-width: 480px) {
+    body {
+        background: url("images/grey_linen.png");
+    }
+    .page-body {
+        box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5);
+        background: url("images/white_linen.png");
+        padding: 20px 30px;
+        border-radius: 6px;
+        margin-bottom: 30px;
+    }
+}
+@media (max-width: 479px) {
+    .navbar {
+        margin-bottom: 0;
+    }
+}

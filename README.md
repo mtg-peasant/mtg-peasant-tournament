@@ -1,1 +1,2 @@
-# mtg-peasant-tournament
+# mtg-tournaments
+

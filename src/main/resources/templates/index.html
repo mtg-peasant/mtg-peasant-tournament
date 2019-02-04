@@ -1,0 +1,12 @@
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::title}, ~{::div.container})}">
+<head>
+    <title th:text="#{index.title}">mtg tournaments</title>
+</head>
+<body>
+<div class="container">
+    <div class="jumbotron">
+        <h1 th:utext="#{index.subtitle.html}">Organize your MTG tournaments!</h1>
+    </div>
+</div>
+</body>
+</html>
