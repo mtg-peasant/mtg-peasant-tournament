@@ -9,42 +9,40 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 
-@ApiModel(description = "A tournament player's score")
+@ApiModel(description = "A tournament player's participation")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Getter
 @Setter
-@Entity(name = "scores")
-public class Score implements Comparable<Score> {
+@Entity(name = "participations")
+public class Participation implements Comparable<Participation> {
     @Embeddable
     @Builder
     @Data
     @Setter(AccessLevel.NONE)
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @AllArgsConstructor
-    public static class ScoreId implements Serializable {
+    public static class ParticipationId implements Serializable {
 
         private static final long serialVersionUID = 1L;
 
-        @ApiModelProperty("Score's tournament")
+        @ApiModelProperty("Participation's tournament")
         @ManyToOne(fetch = FetchType.LAZY, optional = false)
         @JoinColumn(name = "tournament_id")
         private Tournament tournament;
 
-        @ApiModelProperty("Score's player")
+        @ApiModelProperty("Participation's player")
         @ManyToOne(fetch = FetchType.EAGER)
         @JoinColumn(name = "player_id")
         private Player player;
-
-
     }
     /**
      * composite identifier
      */
     @EmbeddedId
     @JsonUnwrapped
-    ScoreId id;
+    ParticipationId id;
 
     @ApiModelProperty("Player match points")
     @Column
@@ -116,7 +114,7 @@ public class Score implements Comparable<Score> {
     }
 
     @Override
-    public int compareTo(Score other) {
+    public int compareTo(Participation other) {
         // 1: match points
         // 2: opponents’match-win percentages
         // 3: game-win percentages
@@ -140,8 +138,8 @@ public class Score implements Comparable<Score> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Score score = (Score) o;
-        return Objects.equals(id.getPlayer(), score.id.getPlayer());
+        Participation participation = (Participation) o;
+        return Objects.equals(id.getPlayer(), participation.id.getPlayer());
     }
 
     @Override
@@ -151,7 +149,7 @@ public class Score implements Comparable<Score> {
 
     @Override
     public String toString() {
-        return "Score{" +
+        return "Participation{" +
                 "'" + id.getPlayer().getName() + "'" +
                 ": " + wins + "-" + losses + "-" + draws +
                 ", match points=" + matchPoints +

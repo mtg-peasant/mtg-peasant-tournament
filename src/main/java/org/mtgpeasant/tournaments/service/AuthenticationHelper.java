@@ -65,4 +65,11 @@ public class AuthenticationHelper {
         }
         return null;
     }
+
+    public static String getUserEmail(Authentication authentication) {
+        // email is the principal name (in any case)
+        return authentication == null ? null : authentication.getName();
+//        AuthentInfo info = extractInfo(authentication);
+//        return info == null ? null : info.getEmail();
+    }
 }

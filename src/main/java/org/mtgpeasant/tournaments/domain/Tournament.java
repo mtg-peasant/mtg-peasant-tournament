@@ -3,6 +3,7 @@ package org.mtgpeasant.tournaments.domain;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
+import org.mtgpeasant.tournaments.domain.exceptions.BadStateException;
 import org.mtgpeasant.tournaments.domain.exceptions.NotFoundException;
 
 import javax.persistence.*;
@@ -10,7 +11,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
+import java.util.Optional;
 
 @ApiModel(description = "A tournament")
 @NoArgsConstructor
@@ -31,19 +32,19 @@ public class Tournament {
     @JoinColumn(name = "owner_id")
     private User owner;
 
-    @ApiModelProperty("The tournament's format")
+    @ApiModelProperty(value = "The tournament's format", example = "peasant")
     @Column
     private MtgFormat format;
 
-    @ApiModelProperty("The tournament's name")
+    @ApiModelProperty(value = "The tournament's name", example = "Peasant Tournament in Toulouse")
     @Column(nullable = false)
     private String name;
 
-    @ApiModelProperty("The tournament's location")
+    @ApiModelProperty(value = "The tournament's location", example = "BlastoDice")
     @Column(nullable = false)
     private String location;
 
-    @ApiModelProperty("The tournament's location address")
+    @ApiModelProperty(value = "The tournament's location address", example = "52 Avenue Honoré Serres, 31000 Toulouse")
     @Column
     private String locationAddress;
 
@@ -64,12 +65,11 @@ public class Tournament {
     @Column
     private java.time.Instant finished;
 
-
-
     public enum Type {
         Direct,
         Swiss,
         SwissAndDirect;
+
     }
     @ApiModelProperty("The tournament's type")
     @Column
@@ -77,85 +77,77 @@ public class Tournament {
     @Builder.Default
     private Type type = Type.Swiss;
 
-
-
     public enum State {
         Pending,
         InProgress,
         Finished;
+
     }
     @ApiModelProperty("The tournament's state")
     @Column
     @Enumerated(EnumType.STRING)
     @Builder.Default
     private State state = State.Pending;
-
-
-//    @ApiModelProperty("The tournament participants")
-//    @Singular
-////    @ManyToMany(fetch = FetchType.EAGER)
-////    @JoinTable(name = "tournament_players",
-////            joinColumns = { @JoinColumn(name = "tournament_id", nullable = false) },
-////            inverseJoinColumns = { @JoinColumn(name = "player_id", nullable = false) })
-//    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "tournament")
-//    private Set<Participant> participants;
-    @ApiModelProperty("The tournament players")
-    @Singular
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "tournament_players")
-    private Set<Player> players;
-
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "id.tournament")
     @OrderColumn(name = "rank")
     @Builder.Default
     private List<Round> rounds = new ArrayList<>();
 
-
-//    @ApiModelProperty("The tournament scores")
-//    @Singular
-//    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "id.tournament")
-//    private Set<Score> scores;
-
-//    @ApiModelProperty("The tournament scores")
-//    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "id.tournament")
-//    @MapKeyJoinColumn(name="id.player")
-//    //@MapKey(name = "id.player")
-//    @Builder.Default
-//    private Map<String, Score> scores = new HashMap<>();
-    @ApiModelProperty("The tournament scores")
+    @ApiModelProperty("The tournament participations")
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "id.tournament")
     @Builder.Default
-    private List<Score> scores = new ArrayList<>();
+    private List<Participation> participations = new ArrayList<>();
 
-    /**
-     * Returns sorted scores (from highest to lowest)
-     */
-    public List<Score> getScores() {
-        Collections.sort(scores, Collections.reverseOrder());
-        return scores;
+    public void addPlayer(Player player) {
+        if(state != State.Pending) {
+            throw new BadStateException("Adding a player to a tournament is only allowed on a 'pending' tournament.");
+        }
+        Optional<Participation> existing = participations.stream().filter(participation -> participation.getId().getPlayer().equals(player)).findFirst();
+        if (!existing.isPresent()) {
+            participations.add(Participation.builder().id(Participation.ParticipationId.builder().tournament(this).player(player).build()).build());
+        }
+    }
+
+    public void removePlayer(Player player) {
+        if(state != State.Pending) {
+            throw new BadStateException("Removing a player from a tournament is only allowed on a 'pending' tournament.");
+        }
+        Optional<Participation> existing = participations.stream().filter(participation -> participation.getId().getPlayer().equals(player)).findFirst();
+        if (existing.isPresent()) {
+            participations.remove(existing.get());
+        }
     }
 
     /**
-     * Returns the score of given player
+     * Returns sorted participations (from highest to lowest)
      */
-    public Score getScore(Player player) {
-        return getScore(player.getName());
+    public List<Participation> getParticipations() {
+        Collections.sort(participations, Collections.reverseOrder());
+        return participations;
     }
 
     /**
-     * Returns the score of given player name
+     * Returns the participation of given player
      */
-    public Score getScore(String playerName) {
-        return scores.stream()
-                .filter(score -> playerName.equals(score.getId().getPlayer().getName()))
-                .findFirst().orElseThrow(() -> new NotFoundException("No score found for player '"+playerName+"'"));
+    public Participation getParticipation(Player player) {
+        return getParticipation(player.getName());
+    }
+
+    /**
+     * Returns the participation of given player name
+     */
+    public Participation getParticipation(String playerName) {
+        return participations.stream()
+                .filter(participation -> playerName.equals(participation.getId().getPlayer().getName()))
+                .findFirst().orElseThrow(() -> new NotFoundException("No participation found for player '"+playerName+"'"));
     }
 
     /**
      * Returns the player by name
      */
     public Player getPlayer(String playerName) {
-        return players.stream()
+        return participations.stream()
+                .map(participation -> participation.getId().getPlayer())
                 .filter(player -> playerName.equals(player.getName()))
                 .findFirst().orElseThrow(() -> new NotFoundException("No player '"+playerName+"'s"));
     }

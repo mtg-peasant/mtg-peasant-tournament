@@ -44,7 +44,7 @@ public class PlayersController extends BaseOAuthController {
             @RequestParam(name = "size", required = false, defaultValue = "10")
                     int size
     ) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("at")));
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("created")));
         return playerRepository.findAll(pageable);
     }
 

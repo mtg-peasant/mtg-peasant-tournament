@@ -38,34 +38,25 @@ public class Match {
         @ApiModelProperty("The match's rank")
         @Column(name="rank")
         private Integer rank;
+
     }
-
-    @ApiModelProperty("Match player one")
-    @ManyToOne(fetch = FetchType.EAGER)
-//        @JoinColumns({
-//                @JoinColumn(name = "tournament_id", referencedColumnName = "tournament_id"),
-//                @JoinColumn(name = "player_one_name", referencedColumnName = "player_id")
-//        })
-//        private Participant participantOne;
-    @JoinColumn(name = "player_one_name")
-    private Player playerOne;
-
-    @ApiModelProperty("Match player two")
-    @ManyToOne(fetch = FetchType.EAGER)
-//        @JoinColumns({
-//                @JoinColumn(name = "tournament_id", referencedColumnName = "tournament_id"),
-//                @JoinColumn(name = "player_two_name", referencedColumnName = "player_id")
-//        })
-//        private Participant participantTwo;
-    @JoinColumn(name = "player_two_name")
-    private Player playerTwo;
-
     /**
      * composite identifier
      */
     @EmbeddedId
     @JsonUnwrapped
     MatchId id;
+
+    @ApiModelProperty("Match player one")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "player_one_name")
+    private Player playerOne;
+
+    @ApiModelProperty("Match player two")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "player_two_name")
+    private Player playerTwo;
+
 
     public enum State {
         Pending,
@@ -140,6 +131,7 @@ public class Match {
     /**
      * Determines whether this match is a bye
      */
+    @JsonIgnore
     public boolean isNotBye() {
         return getPlayerOne() != null && getPlayerTwo() != null;
     }

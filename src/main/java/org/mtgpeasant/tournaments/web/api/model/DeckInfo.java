@@ -15,11 +15,11 @@ import javax.validation.constraints.NotNull;
 @Builder
 @Data
 public class DeckInfo {
-    @ApiModelProperty("The deck's name")
+    @ApiModelProperty(value = "The deck's name", example = "Cool burn v2.1")
     @NotNull
     private String name;
 
-    @ApiModelProperty("The deck's archetype")
+    @ApiModelProperty(value = "The deck's archetype", example = "burn")
     @NotNull
     private String archetype;
 

@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
 @Builder
 @Data
 public class PlayerInfo {
-    @ApiModelProperty("The players's name")
+    @ApiModelProperty(value = "The players's name", example = "deck2beat")
     @NotNull
     private String name;
 }

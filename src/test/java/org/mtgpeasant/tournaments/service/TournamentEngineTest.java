@@ -49,17 +49,18 @@ public class TournamentEngineTest {
                 .type(Tournament.Type.Swiss)
                 .location("BlatoDice")
                 .dateTime(LocalDateTime.parse("2019-01-25T20:00:00"))
-                .player(Stéphane)
-                .player(Yann)
-                .player(Abyssal)
-                .player(Watthieu)
-                .player(Raphaël)
-                .player(_6sco)
-                .player(chou)
-                .player(Laetitia)
-                .player(VeloO)
-                .player(pismy)
                 .build();
+
+        tournament.addPlayer(Stéphane);
+        tournament.addPlayer(Yann);
+        tournament.addPlayer(Abyssal);
+        tournament.addPlayer(Watthieu);
+        tournament.addPlayer(Raphaël);
+        tournament.addPlayer(_6sco);
+        tournament.addPlayer(chou);
+        tournament.addPlayer(Laetitia);
+        tournament.addPlayer(VeloO);
+        tournament.addPlayer(pismy);
 
         engine.start(tournament);
 
@@ -121,16 +122,16 @@ public class TournamentEngineTest {
         assertThat(round2.getState()).isEqualTo(Round.State.InProgress);
 
         // assert points
-        assertThat(tournament.getScore(pismy).getMatchPoints()).isEqualTo(3);
-        assertThat(tournament.getScore(VeloO).getMatchPoints()).isEqualTo(3);
-        assertThat(tournament.getScore(Laetitia).getMatchPoints()).isEqualTo(0);
-        assertThat(tournament.getScore(chou).getMatchPoints()).isEqualTo(0);
-        assertThat(tournament.getScore(_6sco).getMatchPoints()).isEqualTo(0);
-        assertThat(tournament.getScore(Raphaël).getMatchPoints()).isEqualTo(0);
-        assertThat(tournament.getScore(Watthieu).getMatchPoints()).isEqualTo(0);
-        assertThat(tournament.getScore(Abyssal).getMatchPoints()).isEqualTo(3);
-        assertThat(tournament.getScore(Yann).getMatchPoints()).isEqualTo(3);
-        assertThat(tournament.getScore(Stéphane).getMatchPoints()).isEqualTo(3);
+        assertThat(tournament.getParticipation(pismy).getMatchPoints()).isEqualTo(3);
+        assertThat(tournament.getParticipation(VeloO).getMatchPoints()).isEqualTo(3);
+        assertThat(tournament.getParticipation(Laetitia).getMatchPoints()).isEqualTo(0);
+        assertThat(tournament.getParticipation(chou).getMatchPoints()).isEqualTo(0);
+        assertThat(tournament.getParticipation(_6sco).getMatchPoints()).isEqualTo(0);
+        assertThat(tournament.getParticipation(Raphaël).getMatchPoints()).isEqualTo(0);
+        assertThat(tournament.getParticipation(Watthieu).getMatchPoints()).isEqualTo(0);
+        assertThat(tournament.getParticipation(Abyssal).getMatchPoints()).isEqualTo(3);
+        assertThat(tournament.getParticipation(Yann).getMatchPoints()).isEqualTo(3);
+        assertThat(tournament.getParticipation(Stéphane).getMatchPoints()).isEqualTo(3);
 
         // force 2nd round
         round2.setMatches(Arrays.asList(
@@ -179,16 +180,16 @@ public class TournamentEngineTest {
         assertThat(round3.getState()).isEqualTo(Round.State.InProgress);
 
         // assert points
-        assertThat(tournament.getScore(pismy).getMatchPoints()).isEqualTo(6);
-        assertThat(tournament.getScore(VeloO).getMatchPoints()).isEqualTo(3);
-        assertThat(tournament.getScore(Laetitia).getMatchPoints()).isEqualTo(0);
-        assertThat(tournament.getScore(chou).getMatchPoints()).isEqualTo(3);
-        assertThat(tournament.getScore(_6sco).getMatchPoints()).isEqualTo(1);
-        assertThat(tournament.getScore(Raphaël).getMatchPoints()).isEqualTo(1);
-        assertThat(tournament.getScore(Watthieu).getMatchPoints()).isEqualTo(0);
-        assertThat(tournament.getScore(Abyssal).getMatchPoints()).isEqualTo(3);
-        assertThat(tournament.getScore(Yann).getMatchPoints()).isEqualTo(6);
-        assertThat(tournament.getScore(Stéphane).getMatchPoints()).isEqualTo(6);
+        assertThat(tournament.getParticipation(pismy).getMatchPoints()).isEqualTo(6);
+        assertThat(tournament.getParticipation(VeloO).getMatchPoints()).isEqualTo(3);
+        assertThat(tournament.getParticipation(Laetitia).getMatchPoints()).isEqualTo(0);
+        assertThat(tournament.getParticipation(chou).getMatchPoints()).isEqualTo(3);
+        assertThat(tournament.getParticipation(_6sco).getMatchPoints()).isEqualTo(1);
+        assertThat(tournament.getParticipation(Raphaël).getMatchPoints()).isEqualTo(1);
+        assertThat(tournament.getParticipation(Watthieu).getMatchPoints()).isEqualTo(0);
+        assertThat(tournament.getParticipation(Abyssal).getMatchPoints()).isEqualTo(3);
+        assertThat(tournament.getParticipation(Yann).getMatchPoints()).isEqualTo(6);
+        assertThat(tournament.getParticipation(Stéphane).getMatchPoints()).isEqualTo(6);
 
         // force 3rd round
         round3.setMatches(Arrays.asList(
@@ -237,16 +238,16 @@ public class TournamentEngineTest {
         assertThat(round4.getState()).isEqualTo(Round.State.InProgress);
 
         // assert points
-        assertThat(tournament.getScore(pismy).getMatchPoints()).isEqualTo(9);
-        assertThat(tournament.getScore(VeloO).getMatchPoints()).isEqualTo(6);
-        assertThat(tournament.getScore(Laetitia).getMatchPoints()).isEqualTo(3);
-        assertThat(tournament.getScore(chou).getMatchPoints()).isEqualTo(3);
-        assertThat(tournament.getScore(_6sco).getMatchPoints()).isEqualTo(4);
-        assertThat(tournament.getScore(Raphaël).getMatchPoints()).isEqualTo(4);
-        assertThat(tournament.getScore(Watthieu).getMatchPoints()).isEqualTo(0);
-        assertThat(tournament.getScore(Abyssal).getMatchPoints()).isEqualTo(3);
-        assertThat(tournament.getScore(Yann).getMatchPoints()).isEqualTo(6);
-        assertThat(tournament.getScore(Stéphane).getMatchPoints()).isEqualTo(6);
+        assertThat(tournament.getParticipation(pismy).getMatchPoints()).isEqualTo(9);
+        assertThat(tournament.getParticipation(VeloO).getMatchPoints()).isEqualTo(6);
+        assertThat(tournament.getParticipation(Laetitia).getMatchPoints()).isEqualTo(3);
+        assertThat(tournament.getParticipation(chou).getMatchPoints()).isEqualTo(3);
+        assertThat(tournament.getParticipation(_6sco).getMatchPoints()).isEqualTo(4);
+        assertThat(tournament.getParticipation(Raphaël).getMatchPoints()).isEqualTo(4);
+        assertThat(tournament.getParticipation(Watthieu).getMatchPoints()).isEqualTo(0);
+        assertThat(tournament.getParticipation(Abyssal).getMatchPoints()).isEqualTo(3);
+        assertThat(tournament.getParticipation(Yann).getMatchPoints()).isEqualTo(6);
+        assertThat(tournament.getParticipation(Stéphane).getMatchPoints()).isEqualTo(6);
 
         // force 4th round
         round4.setMatches(Arrays.asList(
@@ -294,8 +295,8 @@ public class TournamentEngineTest {
         assertThat(round4.getState()).isEqualTo(Round.State.Finished);
         assertThat(tournament.getState()).isEqualTo(Tournament.State.Finished);
 
-        // check scores and order
-        assertThat(tournament.getScores())
+        // check participations and order
+        assertThat(tournament.getParticipations())
                 .extracting("id.player", "matchPoints")
                 .containsExactly(
                         tuple(pismy, 12),
@@ -307,7 +308,7 @@ public class TournamentEngineTest {
                         tuple(Raphaël, 4),
                         tuple(Abyssal, 3),
                         tuple(Laetitia, 3),
-                        tuple(Watthieu,0)
+                        tuple(Watthieu, 0)
                 );
     }
 }

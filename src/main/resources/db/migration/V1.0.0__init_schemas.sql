@@ -85,7 +85,7 @@ create table matches (
     on delete cascade
 );
 
-create table scores (
+create table participations (
   draws integer,
   game_win_percentage integer,
   losses integer,
@@ -97,18 +97,10 @@ create table scores (
   player_id varchar(255) not null,
   tournament_id bigint not null,
   primary key (tournament_id, player_id),
-  constraint FK_score_2_tournament foreign key (tournament_id) references tournaments (id)
+  constraint FK_participation_2_tournament foreign key (tournament_id) references tournaments (id)
     on delete cascade,
-  constraint FK_score_2_player foreign key (player_id) references players (name)
+  constraint FK_participation_2_player foreign key (player_id) references players (name)
     on delete cascade
-);
-
-create table tournament_players (
-  tournaments_id bigint not null,
-  players_name varchar(255) not null,
-  primary key (tournaments_id, players_name),
-  constraint FK_tournament_players_2_player foreign key (players_name) references players (name),
-  constraint FK_tournament_players_2_tournament foreign key (tournaments_id) references tournaments (id)
 );
 
 

@@ -178,11 +178,9 @@ public class TournamentsController extends BaseOAuthController {
         Tournament tournament = tournamentRepository.findById(id).orElseThrow(() -> new NotFoundException("No tournament with id " + id));
         // 2: check owner matches
         checkCanEdit(tournament, user);
-        // 3: check state
-        checkState(tournament, Tournament.State.Pending, "Adding a participant to a tournament is only allowed on a 'pending' tournament.");
         // load player
         Player player = playerRepository.findById(playerId).orElseThrow(() -> new NotFoundException("No player with id '" + playerId + "'"));
-        tournament.getPlayers().add(player);
+        tournament.addPlayer(player);
         return tournamentRepository.save(tournament);
     }
 
@@ -202,22 +200,18 @@ public class TournamentsController extends BaseOAuthController {
             @ApiParam("tournament id")
             @PathVariable("id") Long id,
             @ApiParam("player name")
-            @PathVariable("player_id") String playerName
+            @PathVariable("player_id") String playerId
     ) {
         User user = checkIsAuthenticated(request);
         // load tournament
         Tournament tournament = tournamentRepository.findById(id).orElseThrow(() -> new NotFoundException("No tournament with id " + id));
         // 2: check owner matches
         checkCanEdit(tournament, user);
-        // 3: check state
-        checkState(tournament, Tournament.State.Pending, "Adding a player to a tournament is only allowed on a 'pending' tournament.");
+        // load player
+        Player player = playerRepository.findById(playerId).orElseThrow(() -> new NotFoundException("No player with id '" + playerId + "'"));
         // remove player
-        Optional<Player> toRemove = tournament.getPlayers().stream().filter(player -> player.getName().equals(playerName)).findFirst();
-        if (toRemove.isPresent()) {
-            tournament.getPlayers().remove(toRemove);
-            return tournamentRepository.save(tournament);
-        }
-        return tournament;
+        tournament.removePlayer(player);
+        return tournamentRepository.save(tournament);
     }
 
     @ApiOperation(value = "Starts a tournament", notes = "Only allowed if the tournament is not started yet ('Pending' state)", authorizations = @Authorization(value = "oauth2", scopes = @AuthorizationScope(scope = "api", description = "The global API access scope")))

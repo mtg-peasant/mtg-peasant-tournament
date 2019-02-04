@@ -1,0 +1,20 @@
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::title}, ~{::div.container})}">
+<head>
+    <title th:text="#{account.delete.title}">Supprimer ton compte</title>
+</head>
+<body>
+<div class="container page-body">
+    <h1 th:text="#{account.delete.title}">Supprimer ton compte</h1>
+    <div class="alert alert-info" role="alert">
+        <p>
+            Supprimer ton compte <strong>mtg-tournaments</strong> effacera toutes tes données.
+        </p>
+    </div>
+
+    <form role="form" method="post" action="/account/delete">
+        <button type="submit" class="btn btn-primary">Poursuivre</button>
+        <a class="btn btn-default" href="/account">Annuler</a>
+    </form>
+</div>
+</body>
+</html>

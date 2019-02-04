@@ -18,7 +18,7 @@ import java.util.Objects;
 @Entity(name = "players")
 public class Player {
     // TODO: est-ce une bonne idée d'utiliser le login/name comme clé primaire?
-    @ApiModelProperty("The player nickname")
+    @ApiModelProperty(value = "The player nickname", example = "deck2beat")
     @Id
     private String name;
 

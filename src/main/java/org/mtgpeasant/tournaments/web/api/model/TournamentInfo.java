@@ -17,7 +17,7 @@ import javax.validation.constraints.NotNull;
 @Builder
 @Data
 public class TournamentInfo {
-    @ApiModelProperty("The tournament's name")
+    @ApiModelProperty(value = "The tournament's name", example = "Peasant Tournament in Toulouse")
     @NotNull
     private String name;
 
@@ -25,15 +25,15 @@ public class TournamentInfo {
     @NotNull
     private Tournament.Type type;
 
-    @ApiModelProperty("The tournament's format")
+    @ApiModelProperty(value = "The tournament's format", example = "peasant")
     @NotNull
     private MtgFormat format;
 
-    @ApiModelProperty("The tournament's location")
+    @ApiModelProperty(value = "The tournament's location", example = "BlastoDice")
     @NotNull
     private String location;
 
-    @ApiModelProperty("The tournament's location address")
+    @ApiModelProperty(value = "The tournament's location address", example = "52 Avenue Honoré Serres, 31000 Toulouse")
     private String locationAddress;
 
     @ApiModelProperty("The tournament's planned date and time")
