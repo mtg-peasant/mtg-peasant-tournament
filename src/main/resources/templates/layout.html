@@ -23,9 +23,9 @@
             </div>
             <div class="" id="navbar-collapse">
                 <ul class="nav navbar-nav navbar-right">
-                    <!--/* not logged: login (with google) */-->
+                    <!--/* not logged: signin (with google) */-->
                     <li th:unless="${#auth.isAuthenticated(#httpServletRequest)}">
-                        <a href="/login/google" th:utext="#{menu.signin.html}">te connecter</a>
+                        <a href="/signin" th:utext="#{menu.signin.html}">te connecter</a>
                     </li>
                     <!--/* logged: picture + name > logout button */-->
                     <li class="dropdown" th:if="${#auth.isAuthenticated(#httpServletRequest)}">
@@ -37,8 +37,8 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li><a href="/logout" th:utext="#{menu.signout.html}"><span class="glyphicon glyphicon-log-out"></span> se déconnecter</a></li>
-                            <li><a href="/account/view" th:utext="#{menu.account.html}"><span class="glyphicon glyphicon-user"></span> profil</a></li>
-                            <li><a href="/account/delete" th:utext="#{menu.delete_account.html}"><span class="glyphicon glyphicon-remove"></span> supprimer ton compte</a></li>
+                            <li><a href="/users/me" th:utext="#{menu.account.html}"><span class="glyphicon glyphicon-user"></span> profil</a></li>
+                            <li><a href="/users/me/delete" th:utext="#{menu.delete_account.html}"><span class="glyphicon glyphicon-remove"></span> supprimer ton compte</a></li>
                         </ul>
                     </li>
                 </ul>

@@ -11,9 +11,9 @@
         </p>
     </div>
 
-    <form role="form" method="post" action="/account/delete">
+    <form role="form" method="post" th:action="@{/users/me/delete}">
         <button type="submit" class="btn btn-primary">Poursuivre</button>
-        <a class="btn btn-default" href="/account">Annuler</a>
+        <a class="btn btn-default" href="/">Annuler</a>
     </form>
 </div>
 </body>

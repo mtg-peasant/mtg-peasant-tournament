@@ -1,75 +1,39 @@
 package org.mtgpeasant.tournaments.service;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 
-import java.util.Map;
+import java.util.Optional;
 
 @Slf4j
 public class AuthenticationHelper {
-    @Value
-    @AllArgsConstructor
-    @Builder
-    public static class AuthentInfo {
-        public enum Type {INTERACTIVE, OAUTH}
 
-        private final Type type;
-        private final String email;
-        private final String fullname;
-        private final String firstname;
-        private final String lastname;
-        private final String picture;
-    }
-
-    //    {
-//        "sub": "111599535581185938842",
-//            "name": "Pierre SMEYERS",
-//            "given_name": "Pierre",
-//            "family_name": "SMEYERS",
-//            "profile": "https://plus.google.com/111599535581185938842",
-//            "picture": "https://lh3.googleusercontent.com/-2H91jVcbQKg/AAAAAAAAAAI/AAAAAAAAm34/HQIqRkQW90A/photo.jpg",
-//            "email": "pierre.smeyers@gmail.com",
-//            "email_verified": true,
-//            "gender": "male",
-//            "locale": "fr"
-//    }
-    public static AuthentInfo extractInfo(Authentication authentication) {
-        log.debug("Extract info from {}", authentication);
-        if (authentication instanceof OAuth2Authentication) {
-            Authentication userAuthentication = ((OAuth2Authentication) authentication).getUserAuthentication();
-            if (userAuthentication instanceof UsernamePasswordAuthenticationToken) {
-                // that can be either an interactive SSO authent, or an OAuth token authent
-                // in first case, details are in the userAuthentication details
-                if (userAuthentication.getDetails() != null) {
-                    Map<String, String> details = (Map<String, String>) ((OAuth2Authentication) authentication).getUserAuthentication().getDetails();
-                    return AuthentInfo.builder()
-                            .type(AuthentInfo.Type.INTERACTIVE)
-                            .email(details.get("email"))
-                            .fullname(details.get("name"))
-                            .firstname(details.get("given_name"))
-                            .lastname(details.get("family_name"))
-                            .picture(details.get("picture"))
-                            .build();
-                }
-                return AuthentInfo.builder()
-                        .type(AuthentInfo.Type.OAUTH)
-                        // email is the principal name
-                        .email(authentication.getName())
-                        .build();
-            }
+    public static Optional<ExtendedUsersDetailsService.ExtendedUser> userInfo(Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return Optional.empty();
         }
-        return null;
+        Authentication userAuthentication = authentication instanceof OAuth2Authentication ? ((OAuth2Authentication) authentication).getUserAuthentication() : authentication;
+        if (userAuthentication.getPrincipal() instanceof ExtendedUsersDetailsService.ExtendedUser) {
+            return Optional.of((ExtendedUsersDetailsService.ExtendedUser) userAuthentication.getPrincipal());
+        }
+        log.warn("Unexpected authentication object: {}", authentication);
+        return Optional.empty();
     }
 
-    public static String getUserEmail(Authentication authentication) {
-        // email is the principal name (in any case)
-        return authentication == null ? null : authentication.getName();
-//        AuthentInfo info = extractInfo(authentication);
-//        return info == null ? null : info.getEmail();
+    public static String userEmail(Authentication authentication) {
+        return userInfo(authentication).map(ExtendedUsersDetailsService.ExtendedUser::getEmail).orElse(null);
+    }
+
+    public static String pseudo(Authentication authentication) {
+        return userInfo(authentication).map(ExtendedUsersDetailsService.ExtendedUser::getPseudo).orElse(null);
+    }
+
+    public static String fullName(Authentication authentication) {
+        return userInfo(authentication).map(ExtendedUsersDetailsService.ExtendedUser::getFullName).orElse(null);
+    }
+
+    public static String pictureUrl(Authentication authentication) {
+        return userInfo(authentication).map(ExtendedUsersDetailsService.ExtendedUser::getPictureUrl).orElse(null);
     }
 }

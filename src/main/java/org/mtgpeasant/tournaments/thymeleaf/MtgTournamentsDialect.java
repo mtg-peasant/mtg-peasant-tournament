@@ -27,7 +27,7 @@ public class MtgTournamentsDialect implements IExpressionObjectDialect {
             @Override
             public Object buildObject(IExpressionContext eExpressionContext, String expressionObjectName) {
 //                Locale locale = eExpressionContext.getLocale();
-                return new AuthenticationUtils();
+                return new AuthenticationExpressions();
             }
 
             @Override

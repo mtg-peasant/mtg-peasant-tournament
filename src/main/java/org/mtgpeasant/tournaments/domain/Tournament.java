@@ -88,6 +88,7 @@ public class Tournament {
     @Enumerated(EnumType.STRING)
     @Builder.Default
     private State state = State.Pending;
+
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "id.tournament")
     @OrderColumn(name = "rank")
     @Builder.Default

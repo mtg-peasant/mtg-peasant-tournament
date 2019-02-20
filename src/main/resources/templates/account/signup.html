@@ -1,0 +1,108 @@
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::title}, ~{::div.container})}">
+<!--/*@thymesVar id="form" type="org.mtgpeasant.tournaments.web.ui.model.SignUpForm"*/-->
+<head>
+    <title th:text="#{signup.title}">Sign up</title>
+</head>
+<body>
+<div class="container signup-page">
+
+    <!-- signin/password form -->
+    <form th:action="@{/signup}" method="POST" id="signup-form" class="rounded shadow" th:object="${form}">
+        <h1 th:text="#{signup.title}">Sign up</h1>
+
+        <!--/* error alert */-->
+        <div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
+            <!--/* then list global errors */-->
+            <p th:each="err : ${#fields.globalErrors()}">
+                <span class="icon-error-severe" aria-hidden="true"></span>
+                <span th:text="${err}"></span>
+            </p>
+        </div>
+
+        <div class="form-group">
+            <div class="input-group">
+                <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span></span>
+                <label class="sr-only" for="email">Email</label>
+                <input type="email" class="form-control" id="email" required="required"
+                       th:errorclass="has-error"
+                       th:field="*{email}"
+                       th:placeholder="#{account.email.label.hint}"/>
+            </div>
+            <p class="field-errors" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"><span
+                    class="icon-error-severe" aria-hidden="true"></span> messages</p>
+        </div>
+
+        <div class="form-group">
+            <div class="input-group">
+                <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></span>
+                <label class="sr-only" for="pseudo">Pseudo</label>
+                <input type="text" class="form-control" id="pseudo" required="required"
+                       minlength="5"
+                       th:errorclass="has-error"
+                       th:field="*{pseudo}"
+                       th:placeholder="#{account.pseudo.label.hint}"/>
+            </div>
+            <p class="field-errors" th:if="${#fields.hasErrors('pseudo')}" th:errors="*{pseudo}"><span
+                    class="icon-error-severe" aria-hidden="true"></span> messages</p>
+        </div>
+
+        <div class="form-group">
+            <div class="input-group">
+                <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></span>
+                <label class="sr-only" for="fullName">Pseudo</label>
+                <input type="text" class="form-control" id="fullName" required="required"
+                       th:errorclass="has-error"
+                       th:field="*{fullName}"
+                       th:placeholder="#{account.fullName.label.hint}"/>
+            </div>
+            <p class="field-errors" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}"><span
+                    class="icon-error-severe" aria-hidden="true"></span> messages</p>
+        </div>
+
+        <div class="form-group">
+            <div class="input-group">
+                <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span></span>
+                <label class="sr-only" for="password">Password</label>
+                <input type="password" class="form-control" id="password" required="required"
+                       onchange="form.confirmpassword.pattern = this.value;"
+                       pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                       th:errorclass="has-error"
+                       th:field="*{password}"
+                       th:placeholder="#{account.password.label.hint}"/>
+            </div>
+            <p class="field-errors" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"><span
+                    class="icon-error-severe" aria-hidden="true"></span> messages</p>
+        </div>
+
+        <div class="form-group">
+            <div class="input-group">
+                <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span></span>
+                <label class="sr-only" for="confirmpassword">Confirm password</label>
+                <input type="password" class="form-control" id="confirmpassword" required="required" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"/>
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <!-- submit -->
+            <button type="submit" class="btn btn-primary btn-block btn-signup">Sign up</button>
+        </div>
+
+        <div class="or-separator"><i>or</i></div>
+
+        <p class="text-center">Sign up with your social media account</p>
+
+        <p class="text-center social-btn">
+            <a class="btn btn-default btn-google" th:href="@{/signin/google}" th:text="#{signin.with_google.label}">Google</a>
+            <a class="btn btn-default btn-facebook" th:href="@{/signin/facebook}" th:text="#{signin.with_facebook.label}">Facebook</a>
+        </p>
+
+        <div class="or-separator"><i>or</i></div>
+
+        <p class="text-center text-muted small">Have an account? <a th:href="@{/signin}">Sign in here!</a></p>
+
+    </form>
+
+</div>
+</body>
+</html>

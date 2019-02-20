@@ -16,6 +16,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.client.OAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.filter.OAuth2ClientAuthenticationProcessingFilter;
@@ -28,6 +30,10 @@ import javax.servlet.Filter;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * TODO:
+ * - remember me
+ */
 @Configuration
 @EnableWebSecurity
 @EnableOAuth2Client
@@ -48,15 +54,27 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        //@formatter:off
+        // csrf
+        http.csrf()
+                .disable();
+
+        // headers
+        http.headers()
+            .cacheControl()
+            .and()
+            .frameOptions()
+            .sameOrigin();
+
         // login
-        http
-                .formLogin()
-                .loginPage("/login");
+        http.formLogin()
+            .permitAll()
+            .loginPage("/signin");
 
         // authorization
         http.authorizeRequests()
                 // unauthorized urls
-                .antMatchers("/", "/login", "/login/**", "/about", "/privacypolicy", "/error", "/manage/**")
+                .antMatchers("/", "/signin/**", "/signup/**", "/users/**", "/about", "/privacypolicy", "/error", "/manage/**")
                 .permitAll()
                 .and()
                 .authorizeRequests()
@@ -66,9 +84,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // install SSO filter before BasicAuthenticationFilter
         http.addFilterBefore(ssoFilter(), BasicAuthenticationFilter.class);
 
-        // and remember me (useful?)
-//        http.rememberMe();//
-        http.csrf().disable();
+        // remember me
+        // TODO
+//        http.rememberMe()
+//            .useSecureCookie(true)
+//            .tokenValiditySeconds(60 * 60 * 24 * 10) // 10 days
+//            .rememberMeServices(rememberMeServices)
+//            .key(rememberMeKey)
+
+        // @formatter:on
     }
 
     @Autowired
@@ -104,10 +128,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         tokenServices.setPrincipalExtractor(new EmailExtractor());
         tokenServices.setRestTemplate(template);
 
-        OAuth2ClientAuthenticationProcessingFilter processingFilter = new OAuth2ClientAuthenticationProcessingFilter("/login/" + name);
+        OAuth2ClientAuthenticationProcessingFilter processingFilter = new OAuth2ClientAuthenticationProcessingFilter("/signin/" + name);
         processingFilter.setRestTemplate(template);
+        // TODO
+//        processingFilter.setRememberMeServices();
         processingFilter.setTokenServices(tokenServices);
         processingFilter.setAuthenticationSuccessHandler(ssoAuthenticationSuccessHandler);
+        processingFilter.setAuthenticationManager(new AuthenticationManager() {
+            @Override
+            public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+                System.out.println("authenticate");
+                return authentication;
+            }
+        });
 
         return processingFilter;
     }

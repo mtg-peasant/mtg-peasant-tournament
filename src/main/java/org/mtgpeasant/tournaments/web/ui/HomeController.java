@@ -14,7 +14,7 @@ public class HomeController {
 
     @GetMapping("/")
     public ModelAndView home(Authentication authentication) {
-//        String email = AuthenticationHelper.getUserEmail(authentication);
+//        String email = AuthenticationHelper.userEmail(authentication);
 //        User user = email == null ? null : userRepository.findByEmail(email).orElse(null);
         // show guest page
         return new ModelAndView("index");
@@ -30,8 +30,8 @@ public class HomeController {
         return new ModelAndView("privacypolicy");
     }
 
-    @GetMapping("/login")
-    public ModelAndView login() {
-        return new ModelAndView("login");
+    @GetMapping("/signin")
+    public ModelAndView signin() {
+        return new ModelAndView("signin");
     }
 }

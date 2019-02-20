@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.Instant;
@@ -23,17 +24,21 @@ import java.time.Instant;
 public class User {
     @ApiModelProperty("User's id")
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    // TODO: generated 10 chars hex string
-    private Long id;
+    @GeneratedValue(generator = RandomStringIdGenerator.NAME)
+    @GenericGenerator(strategy = "org.mtgpeasant.tournaments.domain.RandomStringIdGenerator", name = RandomStringIdGenerator.NAME)
+    private String id;
 
-    @ApiModelProperty(value = "User's pseudo", example = "organizer")
-    @Column(name="pseudo", nullable = false, unique = true)
+    @ApiModelProperty(value = "User's pseudo", example = "m@ster")
+    @Column(name="pseudo", unique = true)
     private String pseudo;
 
     @JsonIgnore
     @Column(name="email", nullable = false, unique = true)
     private String email;
+
+    @JsonIgnore
+    @Column(name="password")
+    private String password;
 
     @ApiModelProperty(value = "User's full name", example = "Jean Dupont")
     @Column(name="full_name", nullable = false)

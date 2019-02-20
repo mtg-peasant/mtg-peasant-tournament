@@ -55,8 +55,45 @@ body {
 /* ============================================================================ */
 /* === specific styles
 /* ============================================================================ */
+.signin-page, .signup-page {
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5);
+    background: url("images/white_linen.png");
+    padding: 10px 30px;
+    border-radius: 6px;
+    margin: 0 auto 30px auto;
+    width: 100%;
+    max-width: 330px;
+    text-align: center;
+}
+.signin-page h1, .signup-page h1 {
+    text-align: center;
+}
+.or-separator {
+    margin-top: 20px;
+    text-align: center;
+    border-top: 1px solid #ccc;
+}
+.or-separator i {
+    padding: 0 10px;
+    background: #f6f6f6;
+    position: relative;
+    top: -11px;
+    z-index: 1;
+}
+.btn-signin, .btn-signup {
+    font-weight: bold;
+}
 .btn-google {
     background-image: url("images/google.svg");
+    background-position: 5px center;
+    background-repeat: no-repeat;
+    background-size: auto 1.5em;
+    padding-left: 2.1em;
+}
+.btn-facebook {
+    background-image: url("images/facebook.svg");
+    background-color: #507cc0;
+    color: white;
     background-position: 5px center;
     background-repeat: no-repeat;
     background-size: auto 1.5em;
